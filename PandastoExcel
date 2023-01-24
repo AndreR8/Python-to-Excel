@@ -1,0 +1,141 @@
+
+import pandas as pd
+import numpy as np
+import datetime
+
+#Selects the excell file you want to work with and deletes the first 9 rows
+CallCount = pd.read_csv (r'C:\Users\CallReport.csv')
+
+leads=pd.read_csv (r'C:\Users\LeadReport.021.csv')
+
+#Renaming the Columns
+CallCount.rename(columns = {'Number':'Client Number'}, inplace = True)
+
+
+#Count the number of times a account number comes up 
+CallCount['Call Count'] = CallCount.groupby('Client Number').cumcount() + 1
+
+
+
+#drop Collumns
+CallCount.drop(["Name", "Full Name", "Brand", "Subject", "Status", "Date Created", "Hours", "Minutes", "second"], axis = 1, inplace = True)
+
+
+
+CallCount2 = CallCount.copy(deep=True)
+
+
+ 
+ 
+Ppcleads2 = Ppcleads.merge(CallCount2,
+                             left_on='Client Number',
+                             right_on='Client Number',
+                             how='left')
+
+
+
+#drop the columns that you dont need
+leads2.drop(["Lead Name", "Email Address", "datetime"], axis = 1, inplace = True)    
+
+#replace nan values in call count to 0
+leads2['Call Count'] = leads2['Call Count'].fillna(0)
+
+
+#drop the duplicates 
+CallCount22 = CallCount2.drop_duplicates(subset=["Client Number"], keep=False)
+
+
+leads2['Lead Date Created'] = leads2['Lead Date Created'].apply(pd.to_datetime)
+
+#sort the values by date
+leads2.sort_values(by='Lead Date Created', ascending = False, inplace=True)
+
+
+
+#Campaign_Sourcefilter_list = ['google', 'facebook']
+leads2[leads.Campaign_Source.isin(filter_list)]
+
+#filter only facebook instagram and linkedin
+leads2filt = leads2[(leads2['Campaign Source']=='facebook')|(leads2['Campaign Source']=='google')|(leads2['Campaign Source']=='instagram')|(leads2['Campaign Source']=='bing')|
+                          (leads2['Campaign Source']=='linkedin')]
+
+
+
+#remove specific number to filter out from campaign name
+
+leads2filt2=leads2filt.loc[(leads2filt['Campaign Name']!="18464") & 
+                                (leads2filt['AM Name']!="Commissions") &
+                                (leads2filt['Nickname']!="nes") &
+                                (leads2filt['Nickname']!="Dock") &
+                                (leads2filt['Nickname']!="Lui") &
+                                (leads2filt['Nickname']!="Cap") &
+                                (leads2filt['Nickname']!="Abd") &
+                                (leads2filt['Nickname']!="lei") &
+                                (leads2filt['Nickname']!="Red") &
+                                (leads2filt['Nickname']!="Alt") &
+                                (leads2filt['Nickname']!="Qrt") &
+                                (leads2filt['Nickname']!="You") &
+                                (leads2filt['Nickname']!="bol") &
+                                (leads2filt['Nickname']!="au") &
+                                (leads2filt['Nickname']!="S") &
+                                (leads2filt['Nickname']!="L") &
+                                (leads2filt['Nickname']!="J") &
+                                (leads2filt['Nickname']!="A") &
+                                (leads2filt['Nickname']!="s")]
+
+
+#drop blanks from Client number
+filtered_df = leads2filt2[leads2filt2[['Client Number']].notnull().all(1)]
+
+filtered_df.insert(20,'Comments','')
+
+
+
+#Rearange of columns 
+NewLeads = filtered_df[[ "Client Number" ,
+"Comments" ,
+"AM Name" ,  
+"Call Count" ,
+"Client Call Result" , 
+"Lead Call Result" ,
+"Verified",
+"Status" ,
+"Converted" , 
+"Funded Client" , 
+"Country",
+"Lead Date Created",
+"GCLID",
+"Medium",
+"Source",
+"Name",
+"Term",
+"Content",
+"Nickname",
+"id",
+"Note"   ]]
+
+
+#Data frame to excel
+datatoexcel = pd.ExcelWriter('unfiltered.xlsx')
+# write DataFrame to excel
+NewLeads.to_excel(datatoexcel)
+# save the excel
+datatoexcel.save()
+
+#read the file we just saved
+filtered=pd.read_excel (r'C:\Users\unfiltered.xlsx')
+
+filtered2 = filtered.drop_duplicates(subset=["Client Number"], keep='first')
+
+
+#select all rows and all columns starting from the second column
+filtered3 = filtered2.iloc[: , 1:]
+
+
+
+#Data frame to excel
+datatoexcel = pd.ExcelWriter('filteredDec.xlsx')
+# write DataFrame to excel
+filtered3.to_excel(datatoexcel)
+# save the excel
+datatoexcel.save()
