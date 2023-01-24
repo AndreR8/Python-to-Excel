@@ -1,0 +1,166 @@
+
+import pandas as pd
+import numpy as np
+import datetime
+import xlrd
+import openpyxl
+
+#Selects the excell file you want to work with
+journeyopen = pd.read_excel (r'C:\Users\journey_open.xlsx')
+
+journeyclick = pd.read_excel (r'C:\Users\journey_clicked.xlsx')
+
+promotionopen = pd.read_excel (r'C:\Users\promotion_open-.xlsx')
+
+promotionclick = pd.read_excel (r'C:\Users\promotion_clicked.xlsx')
+
+
+
+#Filteres the data to the total only
+
+journeyopen1 = journeyopen.loc[(journeyopen['aggregation_type']=="total")]
+
+journeyclick1 = journeyclick.loc[(journeyclick['aggregation_type']=="total")]
+
+promotionopen1 = promotionopen.loc[(promotionopen['aggregation_type']=="total")]
+
+promotionclick1 = promotionclick.loc[(promotionclick['aggregation_type']=="total")]
+
+
+
+#Data frame to excel
+datatoexcel = pd.ExcelWriter('journeyopen1.xlsx')
+# write DataFrame to excel
+journeyopen1.to_excel(datatoexcel)
+# save the excel
+datatoexcel.save()
+
+
+#Data frame to excel
+datatoexcel = pd.ExcelWriter('journeyclick1.xlsx')
+# write DataFrame to excel
+journeyclick1.to_excel(datatoexcel)
+# save the excel
+datatoexcel.save()
+
+
+#Data frame to excel
+datatoexcel = pd.ExcelWriter('promotionopen1.xlsx')
+# write DataFrame to excel
+promotionopen1.to_excel(datatoexcel)
+# save the excel
+datatoexcel.save()
+
+
+#Data frame to excel
+datatoexcel = pd.ExcelWriter('promotionclick1.xlsx')
+# write DataFrame to excel
+promotionclick1.to_excel(datatoexcel)
+# save the excel
+datatoexcel.save()
+
+
+
+journeyopened = openpyxl.load_workbook(r'C:\Users\ARighas\Downloads\journeyopen1.xlsx')
+
+journeyclicked = openpyxl.load_workbook(r'C:\Users\ARighas\Downloads\journeyclick1.xlsx')
+
+promotionopened = openpyxl.load_workbook(r'C:\Users\ARighas\Downloads\promotionopen1.xlsx')
+
+promotionclicked = openpyxl.load_workbook(r'C:\Users\ARighas\Downloads\promotionclick1.xlsx')
+
+
+
+jopen = journeyopened.active
+jclick = journeyclicked.active
+popen = promotionopened.active
+pclick = promotionclicked.active
+
+#specify where the values should be places in a new df
+
+x1 = jclick['P5'].value #Blanks
+
+x2 = jclick['M2'].value
+x3 = jclick['l2'].value
+x4 = jclick['P2'].value
+x5 = jclick['N2'].value
+
+x6 = jclick['P4'].value #Blanks
+x7 = jclick['N4'].value #Blanks
+
+x8 = jclick['S2'].value
+x9 = jclick['Q2'].value
+
+x10 = jclick['Q4'].value #Blanks
+x11 = jclick['Q4'].value #Blanks
+
+x12 = jopen['AC2'].value
+x13 = jclick['Z2'].value
+x14 = jopen['Z2'].value
+x15 = jclick['X2'].value
+x16 = jopen['X2'].value
+
+x17 = jopen['AC4'].value #Blanks
+x18 = jclick['Z4'].value #Blanks
+x19 = jopen['Z4'].value #Blanks
+x20 = jclick['X4'].value #Blanks
+x21 = jopen['X4'].value #Blanks
+x22 = jopen['AB4'].value #Blanks
+x23 = jclick['AB4'].value #Blanks
+
+x24 = jopen['AB2'].value
+x25 = jclick['AB2'].value
+
+x26 = jopen['AC4'].value #Blanks
+x27 = jclick['Z4'].value #Blanks
+x28 = jopen['Z4'].value #Blanks
+x29 = jclick['X4'].value #Blanks
+x30 = jopen['X4'].value #Blanks
+x31 = jopen['AB4'].value #Blanks
+x32 = jopen['AB4'].value #Blanks
+x33 = jopen['AB4'].value #Blanks
+
+x34 = pclick['L2'].value
+x35 = pclick['K2'].value
+x36 = pclick['O2'].value
+x37 = pclick['M2'].value
+
+x38 = jopen['X4'].value #Blanks
+x39 = jopen['AB4'].value #Blanks
+
+x40 = pclick['R2'].value
+x41 = pclick['P2'].value
+
+x42 = jopen['X4'].value #Blanks
+x43 = jopen['AB4'].value #Blanks
+
+x44 = popen['AB2'].value
+x45 = pclick['Y2'].value
+x46 = popen['Y2'].value
+x47 = pclick['W2'].value
+x48 = popen['W2'].value
+
+x49 = jopen['X4'].value #Blanks
+x50 = jopen['AB4'].value #Blanks
+x51 = jopen['AB4'].value #Blanks
+x52 = jopen['AB4'].value #Blanks
+x53 = jopen['AB4'].value #Blanks
+x54 = jopen['AB4'].value #Blanks
+x55 = jopen['AB4'].value #Blanks
+
+x56 = popen['AA2'].value
+x57 = pclick['AA2'].value
+
+
+#build the new dataframe
+
+data = pd.DataFrame({'A':[x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32,x33,x34,x35,x36,x37,x38,x39,x40,x41,x42,x43,x44,x45,x46,x47,x48,x49,x50,x51,x52,x53,x54,x55,x56,x57]})
+
+
+
+#Data frame to excel
+datatoexcel = pd.ExcelWriter('SoliticsRAW.xlsx')
+# write DataFrame to excel
+data.to_excel(datatoexcel)
+# save the excel
+datatoexcel.save()
