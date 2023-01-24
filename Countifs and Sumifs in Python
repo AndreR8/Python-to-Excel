@@ -1,0 +1,663 @@
+
+import pandas as pd
+from datetime import datetime, timedelta
+import math
+
+#-------------------------LEADS-----------------------------------
+# read PPc file
+ppcdf = pd.read_excel("PPCDec.xlsx")
+
+# Convert 'Date' column to datetime
+ppcdf['Lead Date Created'] = pd.to_datetime(ppcdf['Lead Date Created'])
+
+# Define start and end dates for date range
+start_date = '2023-01-01 00:00:00'
+end_date = '2023-12-01 23:59:59'
+
+# Count number of rows that match criteria
+googleleads = ppcdf.loc[(ppcdf['Campaign Source'] == 'google') & 
+               (ppcdf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+               (ppcdf['Lead Date Created'] <= pd.to_datetime(end_date))].shape[0]
+
+facebookleads = ppcdf.loc[(ppcdf['Campaign Source'] == 'facebook') & 
+               (ppcdf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+               (ppcdf['Lead Date Created'] <= pd.to_datetime(end_date))].shape[0]
+
+instaleads = ppcdf.loc[(ppcdf['Campaign Source'] == 'instagram') & 
+               (ppcdf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+               (ppcdf['Lead Date Created'] <= pd.to_datetime(end_date))].shape[0]
+
+bingleads = ppcdf.loc[(ppcdf['Campaign Source'] == 'bing') & 
+               (ppcdf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+               (ppcdf['Lead Date Created'] <= pd.to_datetime(end_date))].shape[0]
+
+# read org file
+
+orgdf = pd.read_excel("OrgDec.xlsx")
+
+# Convert 'Date' column to datetime
+orgdf['LeadDateCreated1'] = pd.to_datetime(orgdf['LeadDateCreated1'])
+
+
+# Count number of rows that match criteria
+orgleads = orgdf.loc[(orgdf['Classification1'] == 'Organic') & 
+               (orgdf['LeadDateCreated1'] >= pd.to_datetime(start_date)) &
+               (orgdf['LeadDateCreated1'] <= pd.to_datetime(end_date))].shape[0]
+
+
+meddf = pd.read_excel("MediaDec.xlsx")
+
+
+meddf['LeadDateCreated1'] = pd.to_datetime(meddf['LeadDateCreated1'])
+
+
+medialeads = meddf['ClientNumber'].count()
+
+
+#----------------------------------------------------------FTDS-----------------------------------
+
+ftddf = pd.read_excel("Sample1.xlsx")
+
+# Convert 'Date' column to datetime
+ftddf['Date'] = pd.to_datetime(ftddf['Date'])
+
+# organic Count number of rows that match criteria
+#orgftd = ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+##               (ftddf['Date'] >= pd.to_datetime(start_date)) &
+      #         (ftddf['Date'] <= pd.to_datetime(end_date))].shape[0]
+
+
+
+
+
+
+ftddf['Lead Date Created'] = pd.to_datetime(ftddf['Lead Date Created'])
+
+
+
+
+# Define start and end dates for date range
+start_date = '2007-01-01 00:00:00'
+end_date = '2023-01-22 23:59:59'
+
+
+
+
+ftddf['Actual Net Amount'] = pd.to_numeric(ftddf['Actual Net Amount'])
+
+
+
+
+#Total ftd count
+
+#organic ftd count 
+orgcountftd = ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+                     (ftddf['is FTD'] == 'Yes') &   
+                     (ftddf['Date'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Date'] <= pd.to_datetime(end_date))].shape[0]
+
+#Google ftd count 
+googlecountftd = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') & 
+                     (ftddf['is FTD'] == 'Yes') &   
+                     (ftddf['Date'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Date'] <= pd.to_datetime(end_date))].shape[0]
+
+#Facebook/ ftd count 
+facebookcountftd = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') & 
+                     (ftddf['is FTD'] == 'Yes') &   
+                     (ftddf['Date'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Date'] <= pd.to_datetime(end_date))].shape[0]
+
+#Bing ftd count 
+bingcountftd = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') & 
+                     (ftddf['is FTD'] == 'Yes') &   
+                     (ftddf['Date'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Date'] <= pd.to_datetime(end_date))].shape[0]
+
+#Media ftd count 
+mediacountftd = ftddf.loc[(ftddf['Media'] == 'Media') & 
+                     (ftddf['is FTD'] == 'Yes') &   
+                     (ftddf['Date'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Date'] <= pd.to_datetime(end_date))].shape[0]
+
+
+
+
+#Total ftd amount
+
+
+#all Sum ftds for organic 
+orgftdall_value = math.fsum(ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                                (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+
+
+#All ftds for PPC
+googleftdall_value = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                                (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+
+#All ftds for PPC
+facebookftdall_value = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                                (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+#All ftds for PPC
+bingftdall_value = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                                (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+#All ftds for PPC
+mediaftdall_value = math.fsum(ftddf.loc[(ftddf['Media'] == 'Media') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                                (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+
+
+
+
+
+#Late FTD count
+
+
+
+
+#All late ftds for PPC
+
+
+goog1elateftdall_value = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Date_Diff'] > 14)]['Actual Net Amount'])
+
+
+binglateftdall_value = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Date_Diff'] > 14)]['Actual Net Amount'])
+
+
+facebooklateftdall_value = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Date_Diff'] > 14)]['Actual Net Amount'])
+
+
+organiclateftdall_value = math.fsum(ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Date_Diff'] > 14)]['Actual Net Amount'])
+
+medialateftdall_value = math.fsum(ftddf.loc[(ftddf['Media'] == 'Media') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Date_Diff'] > 14)]['Actual Net Amount'])
+
+
+#count late ftd for all 
+googlecountlateftdall_value = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Date_Diff'] > 14)].shape[0]
+
+
+bingcountlateftdall_value = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Date_Diff'] > 14)].shape[0]
+
+
+facebookcountlateftdall_value = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Date_Diff'] > 14)].shape[0]
+
+
+organiccountlateftdall_value = ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Date_Diff'] > 14)].shape[0]
+
+
+mediacountlateftdall_value = ftddf.loc[(ftddf['Media'] == 'Media') & 
+                                (ftddf['is FTD'] == 'Yes') &
+                                (ftddf['Date_Diff'] > 14)].shape[0]
+
+
+
+
+
+
+#Deposits same month count
+organiccountredeposits = ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Client_FTD_Category'] == 'FTD 1/2023')].shape[0]
+
+
+
+googlecountredeposits = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Client_FTD_Category'] == 'FTD 1/2023')].shape[0]
+
+
+facebookcountredeposits = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') & 
+                       (ftddf['Bing/Facebook/Google'] == 'Facebook')             
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Client_FTD_Category'] == 'FTD 1/2023')].shape[0]
+
+
+bingcountredeposits = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Client_FTD_Category'] == 'FTD 1/2023')].shape[0]
+
+mediacountredeposits = ftddf.loc[(ftddf['Media'] == 'Media') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Client_FTD_Category'] == 'FTD 1/2023')].shape[0]
+
+
+#Total ftd amount
+
+
+#same month deposits amount
+orgdepositsamount_value = math.fsum(ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'D') & 
+                                (ftddf['Client_FTD_Category'] == 'FTD 1/2023')]['Actual Net Amount'])
+
+googledepositsamount_value = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'D') & 
+                                (ftddf['Client_FTD_Category'] == 'FTD 1/2023')]['Actual Net Amount'])
+
+facebookdepositsamount_value = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'D') & 
+                                (ftddf['Client_FTD_Category'] == 'FTD 1/2023')]['Actual Net Amount'])
+
+bingdepositsamount_value = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'D') & 
+                                (ftddf['Client_FTD_Category'] == 'FTD 1/2023')]['Actual Net Amount'])
+
+mediadepositsamount_value = math.fsum(ftddf.loc[(ftddf['Media'] == 'Media') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'D') & 
+                                (ftddf['Client_FTD_Category'] == 'FTD 1/2023')]['Actual Net Amount'])
+
+
+###Withdrawals
+
+#Withdrawals same month
+organiccountw = ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Client_FTD_Category'] == 'FTD 1/2023')].shape[0]
+
+
+
+googlecountw = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Client_FTD_Category'] == 'FTD 1/2023')].shape[0]
+
+
+facebookcountw = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Client_FTD_Category'] == 'FTD 1/2023')].shape[0]
+
+
+bingcountw = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Client_FTD_Category'] == 'FTD 1/2023')].shape[0]
+
+mediacountw = ftddf.loc[(ftddf['Media'] == 'Media') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Client_FTD_Category'] == 'FTD 1/2023')].shape[0]
+
+
+
+
+
+#same month withdrawals amount
+orgamountw = math.fsum(ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'W') & 
+                                (ftddf['Client_FTD_Category'] == 'FTD 1/2023')]['Actual Net Amount'])
+
+googleamountw = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'W') & 
+                                (ftddf['Client_FTD_Category'] == 'FTD 1/2023')]['Actual Net Amount'])
+
+facebookamountw = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'W') & 
+                                (ftddf['Client_FTD_Category'] == 'FTD 1/2023')]['Actual Net Amount'])
+
+bingamountw = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'W') & 
+                                (ftddf['Client_FTD_Category'] == 'FTD 1/2023')]['Actual Net Amount'])
+
+mediaamountw = math.fsum(ftddf.loc[(ftddf['Media'] == 'Media') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'W') & 
+                                (ftddf['Client_FTD_Category'] == 'FTD 1/2023')]['Actual Net Amount'])
+
+
+
+
+
+
+
+
+
+# Define start and end dates for date range
+
+start_date = '2022-06-01 00:00:00'
+end_date = '2022-12-01 23:59:59'
+
+
+#Deposits 6 month count
+organiccount6redeposits = ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))].shape[0]
+
+
+
+googlecount6redeposits = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))].shape[0]
+
+
+facebookcount6redeposits = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))].shape[0]
+
+
+bingcount6redeposits = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))].shape[0]
+
+mediacount6redeposits = ftddf.loc[(ftddf['Media'] == 'Media') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))].shape[0]
+
+
+#6 Months REDEPOSITS 
+
+organicamount6redeposits = math.fsum(ftddf.loc[(ftddf['Organic'] == 'Organic') &
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+
+googleamount6redeposits = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') &
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+
+
+facebookamount6redeposits = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') &
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+
+
+bingamount6redeposits = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') &
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+
+mediaamount6redeposits = math.fsum(ftddf.loc[(ftddf['Media'] == 'Media') &
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+
+
+
+
+
+
+#withdrawals 6 month count
+organiccount6w = ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))].shape[0]
+
+
+
+googlecount6w = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))].shape[0]
+
+
+facebookcount6w = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))].shape[0]
+
+
+bingcount6w = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))].shape[0]
+
+mediacount6w = ftddf.loc[(ftddf['Media'] == 'Media') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))].shape[0]
+
+
+#6 Months REDEPOSITS 
+
+organicamount6w = math.fsum(ftddf.loc[(ftddf['Organic'] == 'Organic') &
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+
+googleamount6w = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') &
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+
+
+facebookamount6w = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') &
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+
+
+bingamount6w = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') &
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+
+mediaamount6w = math.fsum(ftddf.loc[(ftddf['Media'] == 'Media') &
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W') & 
+                     (ftddf['Lead Date Created'] >= pd.to_datetime(start_date)) &
+                     (ftddf['Lead Date Created'] <= pd.to_datetime(end_date))]['Actual Net Amount'])
+
+
+
+#WITHDRAWALS ALL MONTHS----------------------------------------------------------------------------------
+
+
+
+#Withdrawals same month
+organiccountallw = ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W')].shape[0]
+
+
+
+googlecountallw = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W')].shape[0]
+
+
+facebookcountallw = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W')].shape[0]
+
+
+bingcountallw = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W')].shape[0]
+
+mediacountallw = ftddf.loc[(ftddf['Media'] == 'Media') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'W')].shape[0]
+
+
+
+
+
+#same month withdrawals amount
+orgamountallw = math.fsum(ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'W')]['Actual Net Amount'])
+
+googleamountallw = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'W')]['Actual Net Amount'])
+
+facebookamountallw = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'W')]['Actual Net Amount'])
+
+bingamountallw = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'W')]['Actual Net Amount'])
+
+mediaamountallw = math.fsum(ftddf.loc[(ftddf['Media'] == 'Media') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'W')]['Actual Net Amount'])
+
+
+
+
+#ALL DEPOSITS
+organiccountalld = ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D')].shape[0]
+
+
+googlecountalld = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D')].shape[0]
+
+
+facebookcountalldw = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D')].shape[0]
+
+
+bingcountalld = ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D')].shape[0]
+
+mediacountalld = ftddf.loc[(ftddf['Media'] == 'Media') & 
+                     (ftddf['is FTD'] == 'No') &   
+                     (ftddf['Type'] == 'D')].shape[0]
+
+
+
+#ALL DEPOSITS AMOUNT
+orgamountalld = math.fsum(ftddf.loc[(ftddf['Organic'] == 'Organic') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'D')]['Actual Net Amount'])
+
+googleamountalld = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Google') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'D')]['Actual Net Amount'])
+
+facebookamountalld = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Facebook') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'D')]['Actual Net Amount'])
+
+bingamountalld = math.fsum(ftddf.loc[(ftddf['Bing/Facebook/Google'] == 'Bing') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'D')]['Actual Net Amount'])
+
+mediaamountalld = math.fsum(ftddf.loc[(ftddf['Media'] == 'Media') & 
+                                (ftddf['is FTD'] == 'No') &   
+                                (ftddf['Type'] == 'D')]['Actual Net Amount'])
+
+
+
+
+
+
+
+# Merge all data into 5 columns with all variables by specified name
+
+performance = pd.concat([pd.Series([googleleads, googlecountftd, googlecountlateftdall_value, googleftdall_value, goog1elateftdall_value, googlecountredeposits,
+                           googledepositsamount_value, googlecount6redeposits, googleamount6redeposits, googlecountalld, googlecountw,
+                           googlecount6w, googlecountallw, googleamountalld, googleamountw, googleamount6w, googleamountallw], name='Google'), pd.Series([facebookleads, 
+                           facebookcountftd, facebookcountlateftdall_value, facebookftdall_value, facebooklateftdall_value, facebookcountredeposits, facebookcountw, facebookcount6w, facebookamountallw, facebookdepositsamount_value,
+                           facebookamountw, facebookamount6w, facebookcountallw], name='Facebook'), pd.Series([bingleads, bingcountftd, bingcountlateftdall_value,
+                           bingftdall_value, binglateftdall_value, bingcountalld, bingcountredeposits, bingcount6redeposits, bingcountw, bingcount6w,
+                           bingcountallw, bingamountalld, bingamountw, bingdepositsamount_value, bingamount6redeposits, bingamount6w, bingamountallw], name='Bing'), 
+                           pd.Series([orgleads, orgcountftd, organiccountlateftdall_value, orgftdall_value, organiclateftdall_value, organiccountredeposits, orgdepositsamount_value,
+                           organiccount6redeposits, organicamount6redeposits, organiccountalld, orgamountalld, organiccountw, organiccount6w, organiccountallw,
+                           orgamountw, organicamount6w, orgamountallw], name='Organic'), pd.Series([medialeads, mediacountftd, mediacountlateftdall_value,
+                            mediaftdall_value, medialateftdall_value, mediacountredeposits, mediacount6redeposits, mediadepositsamount_value, 
+                            mediaamount6redeposits, mediacountalld, mediacountw, mediacount6w, mediaamountalld, mediaamountw, mediaamount6w,
+                            mediacountallw, mediaamountallw], name='Media')], axis=1)
+
+                           
+                                                                                                                             
+                                                                                                                             
+                                                                                                                             
+                                                                                                                             
+                                                                                                                             
+
+
+#Data frame to excel
+datatoexcel = pd.ExcelWriter('Performance.xlsx')
+# write DataFrame to excel
+performance.to_excel(datatoexcel)
+# save the excel
+datatoexcel.save()
+
